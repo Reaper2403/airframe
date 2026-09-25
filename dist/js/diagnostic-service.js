@@ -38,6 +38,17 @@ export function createDiagnosticService(manifest, options={}) {
     return {context:c,capabilities:copy(index.capabilities),scope:{kind:'full_capture_diagnostic_metadata',firstUs:manifest.firstUs,lastUs:Math.min(c.cutoffUs,manifest.lastUs)},limitations:limits};
   }
   function ready(){if(!index)error('evidence_unavailable','Diagnostic evidence has not been loaded.');}
+  function unpackQuality(data,id){
+    if(data?.findingId!==id||!Array.isArray(data.rows))error('parse_incomplete','Malformed quality membership.');
+    if(!data.encoding)return data.rows;
+    if(data.encoding!=='quality-delta-1'||!Array.isArray(data.bases)||data.bases.length!==4||!data.bases.every(Number.isSafeInteger)||!Array.isArray(data.types))error('unsupported_format','Unsupported quality partition encoding.');
+    return data.rows.map(row=>{
+      if(!Array.isArray(row)||row.length!==8||!row.slice(0,4).every(Number.isSafeInteger)||!Number.isInteger(row[7])||typeof data.types[row[7]]!=='string')error('parse_incomplete','Malformed compact quality member.');
+      const restored=row.slice(0,4).map((n,i)=>n+data.bases[i]);
+      if(!restored.every(Number.isSafeInteger))error('parse_incomplete','Quality provenance exceeds safe integer range.');
+      return [...restored,...row.slice(4,7),data.types[row[7]]];
+    });
+  }
   function scope(c,predicate){return {kind:'full_capture_diagnostic_metadata',requestedFirstUs:manifest.firstUs,availableFirstUs:manifest.firstUs,availableLastUs:Math.min(c.cutoffUs,manifest.lastUs),predicate,completeness:'complete_for_published_metadata_predicate'};}
   function recurrence(events,c){
     const rows=events.filter(e=>visible(e,c)&&e.reasonCode===2&&['Deauthentication','Disassociation'].includes(e.type));
@@ -76,9 +87,9 @@ export function createDiagnosticService(manifest, options={}) {
     if(!Number.isInteger(page)||page<0||!Number.isInteger(pageSize)||pageSize<1||pageSize>500)error('invalid_filter','Invalid quality page.');
     // Only the boundary chunk and requested page chunks are fetched.
     const visibleParts=[];let total=0;
-    for(const part of q.partitions){if(!admitted(part.first))continue;let count=part.count;if(!admitted(part.last)){if(!qualityParts.has(part.path)){const data=await read(part.path,part.sha256);if(data.findingId!==id||!Array.isArray(data.rows))error('parse_incomplete','Malformed quality membership.');qualityParts.set(part.path,data.rows);}count=qualityParts.get(part.path).filter(admitted).length;}visibleParts.push({part,start:total,count});total+=count;}
+    for(const part of q.partitions){if(!admitted(part.first))continue;let count=part.count;if(!admitted(part.last)){if(!qualityParts.has(part.path)){const data=await read(part.path,part.sha256);qualityParts.set(part.path,unpackQuality(data,id));}count=qualityParts.get(part.path).filter(admitted).length;}visibleParts.push({part,start:total,count});total+=count;}
     const rows=[],begin=page*pageSize,end=begin+pageSize;const source=manifest.sources.find(s=>s.id===q.source);
-    for(const item of visibleParts){if(item.start>=end||item.start+item.count<=begin)continue;const {part}=item;if(!qualityParts.has(part.path)){const data=await read(part.path,part.sha256);if(data.findingId!==id||!Array.isArray(data.rows))error('parse_incomplete','Malformed quality membership.');qualityParts.set(part.path,data.rows);}const members=qualityParts.get(part.path).filter(admitted).slice(Math.max(0,begin-item.start),Math.min(item.count,end-item.start));for(const tuple of members){const [timeUs,releaseOrdinal,frameNumber,fileOffset,caplen,wirelen,rate,type]=tuple;const e={id:`${q.source}-${frameNumber}`,observationId:`${source.sha256}:${frameNumber}`,source:q.source,captureHash:source.sha256,timeUs,releaseOrdinal,frameNumber,fileOffset,caplen,wirelen,rate,type,frequency:source.frequency,channel:source.channel,declaredSnaplen:q.declaredSnaplen,parseState:'quality_metadata',missingReasons:['Quality metadata projection; full frame fields not included.'],qualityFinding:id,parserVersion:'airframe-security-3.0'};frames.set(e.id,e);rows.push(e);}}
+    for(const item of visibleParts){if(item.start>=end||item.start+item.count<=begin)continue;const {part}=item;if(!qualityParts.has(part.path)){const data=await read(part.path,part.sha256);qualityParts.set(part.path,unpackQuality(data,id));}const members=qualityParts.get(part.path).filter(admitted).slice(Math.max(0,begin-item.start),Math.min(item.count,end-item.start));for(const tuple of members){const [timeUs,releaseOrdinal,frameNumber,fileOffset,caplen,wirelen,rate,type]=tuple;const e={id:`${q.source}-${frameNumber}`,observationId:`${source.sha256}:${frameNumber}`,source:q.source,captureHash:source.sha256,timeUs,releaseOrdinal,frameNumber,fileOffset,caplen,wirelen,rate,type,frequency:source.frequency,channel:source.channel,declaredSnaplen:q.declaredSnaplen,parseState:'quality_metadata',missingReasons:['Quality metadata projection; full frame fields not included.'],qualityFinding:id,parserVersion:'airframe-security-3.0'};frames.set(e.id,e);rows.push(e);}}
     fresh(c);return {id,rows,total,page,pageSize,nextPage:end<total?page+1:null,context:c,predicate:q.detail,restrictions:q.prohibitedMetrics};
   }
   function getInventory(input={}){

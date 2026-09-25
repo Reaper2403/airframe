@@ -126,7 +126,13 @@ def main():
         for start in range(0,len(occurrences),2048):
             part = occurrences[start:start+2048]
             relative = f"quality/{finding['id']}-{start//2048}.json"
-            digest = publish(OUT / relative, {"findingId":finding["id"],"rows":part})
+            # Lossless wire encoding only: all four integer provenance columns
+            # are offsets from this partition's first member, and frame type is
+            # a local dictionary index. Projection semantics remain unchanged.
+            bases = part[0][:4]
+            type_names = sorted({row[7] for row in part})
+            packed = [[row[i]-bases[i] for i in range(4)]+row[4:7]+[type_names.index(row[7])] for row in part]
+            digest = publish(OUT / relative, {"findingId":finding["id"],"encoding":"quality-delta-1","bases":bases,"types":type_names,"rows":packed})
             finding["partitions"].append({"path":relative,"sha256":digest,"count":len(part),"first":part[0][:2],"last":part[-1][:2]})
     inventory_rows = [{**item, "sources":sorted(item["sources"])} for item in inventory.values()]
     quality_hash = publish(OUT / "quality.json", {"findings":quality})

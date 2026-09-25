@@ -50,6 +50,8 @@ The three original episode APIs remain backward-compatible. The single service n
 
 The existing manifest pins the diagnostic index SHA-256. The index pins client, quality-metadata and frame artifacts; quality metadata pins bounded member chunks. Content is verified before publication to a projection. Source provenance is independently preserved. All asynchronous results carry active dataset/version/cutoff/ordinal/generation; obsolete generations are rejected and the shell also rejects obsolete scope/filter responses.
 
+Quality partitions may use lossless quality-delta-1 transport encoding: timestamp, release ordinal, frame number and file offset are integer offsets from a four-value partition base; frame type is a local string-dictionary index. Included length, wire length and rate are unchanged. The service restores and validates every value before applying replay admission or exposing provenance. Wire compression must not remove observations or change projected semantics; semantic digests before and after packaging are a release gate.
+
 File bounds and known metadata are not online-health evidence. Event-derived quality triggers, pattern members, stage observations, inventory-source appearances and signal candidates are admitted by cutoff plus release ordinal. Historical review may access the completed sanitized corpus; replay may not expose future conclusions from it.
 
 See docs/implementation-interface.md for exact version 3 operation names, scope definitions, state enums, predicates and limitations. Tests and independently recomputed audits—not screenshot or report constants—gate release.
