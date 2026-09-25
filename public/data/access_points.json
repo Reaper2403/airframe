@@ -1,0 +1,122 @@
+[
+  {
+    "bssid": "00:0b:86:06:00:00",
+    "frames": 22033,
+    "sensors": [
+      "S05"
+    ],
+    "median_signal_by_sensor": {
+      "S05": -87
+    }
+  },
+  {
+    "bssid": "00:0b:86:04:00:00",
+    "frames": 21984,
+    "sensors": [
+      "S03"
+    ],
+    "median_signal_by_sensor": {
+      "S03": -75
+    }
+  },
+  {
+    "bssid": "00:0b:86:1a:00:00",
+    "frames": 21930,
+    "sensors": [
+      "S07"
+    ],
+    "median_signal_by_sensor": {
+      "S07": -82
+    }
+  },
+  {
+    "bssid": "00:0b:86:07:00:00",
+    "frames": 21909,
+    "sensors": [
+      "S06"
+    ],
+    "median_signal_by_sensor": {
+      "S06": -80
+    }
+  },
+  {
+    "bssid": "00:0b:86:05:00:00",
+    "frames": 21905,
+    "sensors": [
+      "S04"
+    ],
+    "median_signal_by_sensor": {
+      "S04": -88
+    }
+  },
+  {
+    "bssid": "00:0b:86:01:00:00",
+    "frames": 21900,
+    "sensors": [
+      "S01"
+    ],
+    "median_signal_by_sensor": {
+      "S01": -83
+    }
+  },
+  {
+    "bssid": "00:0b:86:0b:00:00",
+    "frames": 21885,
+    "sensors": [
+      "S02"
+    ],
+    "median_signal_by_sensor": {
+      "S02": -82
+    }
+  },
+  {
+    "bssid": "00:0b:86:19:00:00",
+    "frames": 21879,
+    "sensors": [
+      "S06"
+    ],
+    "median_signal_by_sensor": {
+      "S06": -84
+    }
+  },
+  {
+    "bssid": "00:0b:86:02:00:00",
+    "frames": 21865,
+    "sensors": [
+      "S01"
+    ],
+    "median_signal_by_sensor": {
+      "S01": -80
+    }
+  },
+  {
+    "bssid": "00:0b:86:08:00:00",
+    "frames": 21858,
+    "sensors": [
+      "S07"
+    ],
+    "median_signal_by_sensor": {
+      "S07": -77
+    }
+  },
+  {
+    "bssid": "00:0b:86:09:00:00",
+    "frames": 21858,
+    "sensors": [
+      "S08"
+    ],
+    "median_signal_by_sensor": {
+      "S08": -83
+    }
+  },
+  {
+    "bssid": "00:0b:86:0c:00:00",
+    "frames": 21851,
+    "sensors": [
+      "S03"
+    ],
+    "median_signal_by_sensor": {
+      "S03": -81
+    }
+  }
+]
