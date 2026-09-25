@@ -1,16 +1,1 @@
-{
-  "datasetId": "airframe-90d22b0035e00326",
-  "partitions": [
-    {
-      "path": "bundle.json",
-      "sha256": "1ea7b0b139d2ad971db590416f058f424dd4fa03ef9cf3ee228488106af93f7a",
-      "byteLength": 525649,
-      "recordCount": 562,
-      "kind": "complete_curated_client_episode_windows",
-      "completeDataset": false,
-      "firstUs": 1789561528328446,
-      "lastUs": 1789561550682829
-    }
-  ],
-  "fullNormalizedStore": "local-only indexed SQLite; not served to browser"
-}
+{"datasetId":"airframe-90d22b0035e00326","fullNormalizedStore":"local-only indexed SQLite; not served to browser","partitions":[{"byteLength":589240,"completeDataset":false,"firstUs":1789561528328446,"kind":"complete_curated_client_episode_windows","lastUs":1789561550682829,"path":"bundle.json","recordCount":562,"sha256":"d81319a3db8a9c7c62454268e59f7535828c8514f34030d8c1872d5c93bebf06"}]}

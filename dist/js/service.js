@@ -1,4 +1,5 @@
 /** AIRFRAME 2.0: one transport-neutral, cutoff-enforcing evidence boundary. */
+import { createDiagnosticService } from './diagnostic-service.js';
 const COPY = value => structuredClone(value);
 const ORDER = (a, b) => a.timeUs - b.timeUs || a.source.localeCompare(b.source) || a.frameNumber - b.frameNumber;
 const LIMITS = ['Cross-source clock alignment unverified.', 'Sensor health and capture loss unavailable.', 'Association does not establish application recovery.'];
@@ -8,10 +9,11 @@ export class EvidenceError extends Error {
 }
 function fail(code, message) { throw new EvidenceError(code, message); }
 
-export function createService(input) {
+export function createService(input, options = {}) {
   if (!input?.manifest || !Array.isArray(input.events) || !Array.isArray(input.incidents)) fail('dataset_missing', 'The processed evidence bundle is unavailable.');
   const bundle = COPY(input);
   const manifest = bundle.manifest;
+  const diagnostics = createDiagnosticService(manifest, options);
   const events = new Map();
   const cases = new Map(bundle.incidents.map(c => [c.id, c]));
   for (const e of bundle.events) {
@@ -92,7 +94,7 @@ export function createService(input) {
   }
   function getFrame(id, context = {}) {
     const admitted = admit(context), frame = events.get(id);
-    if (!frame) fail('evidence_unavailable', 'This frame is not in the packaged investigation selection.');
+    if (!frame) return diagnostics.getFrameCached(id, admitted);
     if (!visibleFrame(id, admitted)) fail('outside_replay_cutoff', 'This frame has not been released by replay.');
     return COPY({ ...frame, context: admitted, limitations: LIMITS });
   }
@@ -102,11 +104,22 @@ export function createService(input) {
     const q = String(question ?? '').trim().toLowerCase();
     const { deauth, auth, association } = incident.anchors;
     let text, citations = [], supported = true;
-    if (/reason|cause|why|23|controller|next|needed/.test(q)) {
-      text = `Reason code ${deauth.reasonCode ?? 'unavailable'} was recorded in ${deauth.id}. Packet headers do not establish why the AP-addressed transmitter sent it. Inspect AP/controller and AAA logs at this timestamp; RF interference and enterprise authentication failure are not established. Cause remains unresolved.`;
+    if (/compar|all three|shared|similar|distinguish|explanation/.test(q)) {
+      const visible = listIncidents(admitted);
+      const reasons = visible.filter(item=>item.anchors.deauth?.reasonCode===23);
+      text = `${reasons.length} admitted curated cases report reason 23 (IEEE 802.1X failure). This prioritizes authentication/session control, not a proven shared cause. Similar recorded intervals do not distinguish AAA policy, client retry behavior or RF contribution because physical timing is unvalidated and cases are curated. Inspect capture patterns and client history; request controller/AAA decisions and client supplicant errors for the selected intervals. RF interference requires separate measured evidence.`;
+      citations = reasons.map(item=>item.anchors.deauth.id);
+    } else if (/recover|service|eap|four-way|handshake|security|application/.test(q)) {
+      text = `${association ? 'Association is observed, but' : 'Association is not yet observed, and'} enterprise security and service recovery are not established by this episode's connection anchors. Open Client history to inspect safely minimized EAP/key observations. Missing packets alone do not prove failed exchanges. Request a controller/AAA result, client-visible error and a successful application transaction before verifying recovery.`;
+      citations = [deauth,auth,association].filter(Boolean).map(e=>e.id);
+    } else if (/earlier|prior|history|before|outside/.test(q)) {
+      text = 'The curated episode is a fixed 20-second selection, not the full client history. Open Client history for antecedent EAP and repeated terminations, and Capture pattern for related reason-code observations. All wider evidence remains gated by the active replay cutoff; no physical route or common cause is inferred.';
+      citations = [deauth.id];
+    } else if (/reason|cause|why|23|controller|next|needed/.test(q)) {
+      text = `Reason code ${deauth.reasonCode ?? 'unavailable'} was recorded in ${deauth.id}. ${deauth.reasonCode === 23 ? 'This reports IEEE 802.1X authentication failure; it does not establish a specific RADIUS, credential, certificate or account-lockout cause.' : 'The exact underlying cause is unresolved.'} Inspect AP/controller, AAA and client supplicant evidence for this recorded interval. RF interference is not established. Cause remains unresolved.`;
       citations = [deauth.id];
     } else if (/duration|long|elapsed|time|13\.127/.test(q)) {
-      text = association ? `The deauthentication-to-association response interval is ${incident.durationUs.toLocaleString('en-US')} microseconds (${(incident.durationUs / 1e6).toFixed(3)} s), calculated from two observations on ${deauth.source}. It is protocol elapsed time, not application downtime.` : 'A completed deauthentication-to-association interval is not available at this replay cursor. No association response is visible yet.';
+      text = association ? `The recorded timestamp difference is ${incident.durationUs.toLocaleString('en-US')} microseconds (${(incident.durationUs / 1e6).toFixed(3)} s), calculated from two observations on ${deauth.source}. Physical timing is unvalidated, including within-source timestamp validity; this is not verified recovery latency or application downtime. Inspect capture-quality findings before timing interpretation.` : 'A completed deauthentication-to-association interval is not available at this replay cursor. No association response is visible yet.';
       citations = association ? [deauth.id, association.id] : [deauth.id];
     } else if (/retr|46|probe/.test(q)) {
       const query = queryEvidence(id, { selection: /client|request/.test(q) ? 'probes' : 'retry', pageSize: 500 }, admitted);
@@ -120,12 +133,12 @@ export function createService(input) {
       citations = [deauth, auth, association].filter(Boolean).map(e => e.id);
     } else {
       supported = false;
-      text = 'I can summarize this sequence, explain the duration or retry selection, describe source coverage, or identify the next evidence needed. Other questions are not supported by this header-only evidence guide.';
+      text = 'This question is outside the supported evidence interpretation. Use Client history for EAP/key metadata and recurrence, or Capture pattern for related reason-code observations. Exact authentication decisions require controller/AAA and supplicant records for this client and recorded interval; service recovery requires a successful application check. AIRFRAME can prepare that evidence request, but those external sources are not connected.';
     }
     return COPY({ text, citations, supported, context: admitted, limitations: LIMITS });
   }
   function listIncidents(context = {}) { return [...cases.keys()].map(id => getIncident(id, context)).filter(Boolean); }
-  return { manifest: COPY(manifest), listIncidents, listInvestigations: listIncidents, getIncident, queryEvidence, getFrame,
+  return { ...diagnostics, manifest: COPY(manifest), listIncidents, listInvestigations: listIncidents, getIncident, queryEvidence, getFrame,
     answer, contextualAnswer: (intent, id, context) => answer(id, intent, context),
     getSources: (context = {}) => COPY(manifest.sources.map(s => ({ ...s, context: admit(context) }))) };
 }

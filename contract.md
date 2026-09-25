@@ -1,6 +1,6 @@
 # AIRFRAME implementation contract
 
-Version: 1.0. Status: planning baseline, not a claim of implementation. Created 2026-09-25.
+Version: 3.0 diagnostic amendment. Status: authorized local implementation, subject to release verification. Updated 2026-09-25. Earlier module prose remains the baseline except where this amendment explicitly supersedes it.
 
 ## Purpose and authority
 
@@ -10,7 +10,7 @@ This contract governs all future implementation agents. MUST is an acceptance re
 
 Authority order: explicit user instructions; this contract and the verified data ledger; module contracts; approved wireframes for composition; existing prototype as reference only. If observed packet evidence contradicts this ledger, record the discrepancy and revise the affected requirements before presenting the old finding. Never alter data to match a screenshot.
 
-This task produced documentation only. A future swarm is planned, not started. No application changes, infrastructure operations, or publication are authorized by this document alone.
+The user has authorized a local implementation swarm. This contract does not independently authorize production infrastructure changes or publication.
 
 ## Read order
 
@@ -27,7 +27,32 @@ The factory drawing is illustrative. Actual AP and sensor coordinates, physical 
 
 A successful association response establishes a protocol observation. It does not prove EAP completion, key establishment, IP connectivity, application recovery, or production restoration. The preferred label is “Association observed” and the duration label is “Deauth → association response.”
 
-No application payload or layer-3 inspection. Passive header analysis only. EAP/802.1X metadata is a future capability until its presence and safe parsing are verified. No automatic network changes, generated worker tracking, simulated fixes mixed into capture evidence, or calibrated confidence percentages.
+No application payload or layer-3 inspection. Passive protocol metadata only. Version 3 explicitly permits bounded EAP/EAPOL metadata parsing after parser/privacy fixtures pass: EAPOL version/type; EAP code, identifier and type; key message classification, key-information flags and replay counter. Identity strings, method bodies, keys, nonces, MIC bytes, SSIDs and application bytes are forbidden in public artifacts. Protected bodies remain uninterpreted. No automatic network changes, generated worker tracking, simulated fixes mixed into capture evidence, or calibrated confidence percentages.
+
+## Version 3 diagnostic amendment
+
+The three original episode APIs remain backward-compatible. The single service now also owns asynchronous, integrity-checked full-capture diagnostic projections. The original 562-frame selection is not the full capture; wider evidence is obtained through sanitized client-history partitions and bounded quality-membership chunks. Raw captures and the identity registry remain restricted locally.
+
+### Evidence and interpretation
+
+- Reason 23 establishes a reported IEEE 802.1X authentication failure, not an exact RADIUS, certificate, credential or lockout cause and not transmitter authenticity. Reason 2 reports previous authentication no longer valid.
+- Open-system authentication requires algorithm 0. Association, enterprise EAP observations, key observations, protected traffic and application verification remain distinct. Observed M3 never fabricates missing M2. Later-state counterevidence applies to a claim, not a packet's observation state.
+- Client history includes non-beacon observations involving globally aliased unicast non-AP addresses. C aliases have recognized client roles; A aliases retain uncertain role. Multicast addresses are never client-population members. Completeness means published predicate membership, not lossless capture or validated sensor health.
+- Capture patterns group qualifying reason-code observations. Counts distinguish termination observations, unique client aliases and clients meeting the recurrence rule. A pattern is not a shared-cause diagnosis.
+- Recurrence uses at least three reason-2 terminations for a client/BSSID/source in an inclusive five-minute recorded-time window. It is an observation rule, not a physical-time or service SLA claim.
+- Quality rules expose exact provenance and metric restrictions. Within-source timing validity is separate from cross-source alignment. Invalid rates cannot produce airtime/utilization. Snapshot-length anomalies retain safely bounded records and disclose permissive handling.
+- Quality summaries may expose a labelled lower bound in replay until the boundary partition loads. They MUST expose countExact and countLabel; a lower bound cannot appear as an exact total. Quality details provide exact prefix count and stable paginated members.
+- Retry ratios count retry-marked probe-response observations divided by all probe-response observations in the selected client/window/transmitter/source scope. They are not packet-loss rates. Candidate original/retry pairing has explicit matching fields and uncertainty; missing ACK is not proof of loss.
+- Inventory means observed BSSID aliases, not physical AP count or expected inventory. Qualified signal-comparison leads use client-transmitted sensor RSSI only and require actual AP/client roaming evidence before diagnosis.
+- Association does not verify security or service. External evidence requests are unsent drafts. Required unavailable checks keep validation inconclusive.
+
+### Delivery and replay
+
+The existing manifest pins the diagnostic index SHA-256. The index pins client, quality-metadata and frame artifacts; quality metadata pins bounded member chunks. Content is verified before publication to a projection. Source provenance is independently preserved. All asynchronous results carry active dataset/version/cutoff/ordinal/generation; obsolete generations are rejected and the shell also rejects obsolete scope/filter responses.
+
+File bounds and known metadata are not online-health evidence. Event-derived quality triggers, pattern members, stage observations, inventory-source appearances and signal candidates are admitted by cutoff plus release ordinal. Historical review may access the completed sanitized corpus; replay may not expose future conclusions from it.
+
+See docs/implementation-interface.md for exact version 3 operation names, scope definitions, state enums, predicates and limitations. Tests and independently recomputed audits—not screenshot or report constants—gate release.
 
 ## Module ownership and dependencies
 

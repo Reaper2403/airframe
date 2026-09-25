@@ -159,6 +159,50 @@ def decode(raw):
     channel = ((freq - 5000) // 5 if freq and 5000 < freq < 5900 else
                (freq - 2407) // 5 if freq and 2412 <= freq <= 2472 else
                14 if freq == 2484 else None)
+    security = {"state": "not_security_frame"}
+    if typ == 2 and sub in (0, 8):
+        security = {"state": "protected" if protected else "not_eapol"}
+        header_size = 24 + (6 if to_ds and from_ds else 0) + (2 if sub == 8 else 0)
+        if sub == 8 and fc & 0x8000:
+            header_size += 4
+        if not protected and len(d) >= header_size + 8 and d[header_size:header_size+8] == b"\xaa\xaa\x03\x00\x00\x00\x88\x8e":
+            payload = d[header_size+8:]
+            security = {"state": "truncated", "protocol": "EAPOL"}
+            if len(payload) >= 4:
+                version, packet_type, declared = struct.unpack_from("!BBH", payload)
+                security.update(version=version, packetType=packet_type)
+                if len(payload) >= 4 + declared:
+                    security["state"] = "parsed"
+                    body = payload[4:4+declared]
+                    if version not in (1, 2, 3):
+                        security["state"] = "unsupported"
+                    elif packet_type == 0:
+                        if len(body) < 4:
+                            security["state"] = "truncated"
+                        else:
+                            code, identifier, eap_length = struct.unpack_from("!BBH", body)
+                            if eap_length < 4 or eap_length > len(body) or code not in (1, 2, 3, 4) or (code in (1, 2) and eap_length < 5):
+                                security["state"] = "malformed"
+                            else:
+                                security.update(protocol="EAP", code=code, identifier=identifier)
+                                if code in (1, 2) and eap_length >= 5:
+                                    security["eapType"] = body[4]
+                                # Identity and method bodies are deliberately never retained.
+                                security["label"] = {1: "EAP Request", 2: "EAP Response", 3: "EAP Success", 4: "EAP Failure"}.get(code, "EAP code")
+                                if security.get("eapType") == 1:
+                                    security["label"] += " Identity"
+                    elif packet_type == 3:
+                        if len(body) < 95:
+                            security["state"] = "truncated"
+                        elif body[0] not in (2, 254):
+                            security["state"] = "unsupported"
+                        else:
+                            info = struct.unpack_from("!H", body, 1)[0]
+                            ack, mic, install, secure = (bool(info & mask) for mask in (0x80, 0x100, 0x40, 0x200))
+                            pairwise = bool(info & 8)
+                            stage = ("M1" if ack and not mic else "M3" if ack and mic else "M4" if mic and secure else "M2" if mic else "Unclassified") if pairwise else "Group key"
+                            security.update(protocol="EAPOL-Key", keyStage=stage, keyInfo=info,
+                                            replayCounter=str(struct.unpack_from("!Q", body, 5)[0]), label=f"EAPOL key {stage}")
     return dict(type=TYPES.get((typ, sub), f"Type {typ}/{sub}"), frameType=typ,
                 frameSubtype=sub, transmitter=ta, receiver=ra, bssid=bssid,
                 sourceAddress=sa, destinationAddress=da, sequence=seq, fragment=frag,
@@ -170,7 +214,7 @@ def decode(raw):
                 rate=values[2][0] / 2 if 2 in values else None,
                 reasonCode=reason, statusCode=status, authAlgorithm=algorithm,
                 authTransaction=transaction, parseState="partial" if missing else "valid",
-                missingReasons=missing)
+                missingReasons=missing, security=security)
 
 
 def compact(value):

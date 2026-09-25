@@ -190,7 +190,7 @@ test('optional global release ordinal gates equal-timestamp frames and every rea
 });
 
 test('parser adversarial synthetic fixtures: radiotap, management, protected, DS and control', () => {
-  const result = spawnSync('../.analysis-env/bin/python', ['-c', `
+  const result = spawnSync(process.env.AIRFRAME_PYTHON || 'python3', ['-c', `
 import importlib.util, struct, tempfile
 from pathlib import Path
 spec=importlib.util.spec_from_file_location('ingest','scripts/build_evidence.py'); m=importlib.util.module_from_spec(spec); spec.loader.exec_module(m)

@@ -1,11 +1,11 @@
 {
   "name": "airframe",
   "private": true,
-  "version": "2.0.0",
+  "version": "3.0.0",
   "type": "module",
   "scripts": {
     "start": "node scripts/serve.mjs",
-    "test": "node --test tests/service.test.mjs tests/static.test.mjs",
-    "test:ui": "node tests/ui.test.mjs"
+    "test": "node --test tests/service.test.mjs tests/static.test.mjs tests/remediation-service.test.mjs tests/remediation-parser.test.mjs tests/remediation-static.test.mjs",
+    "test:ui": "node tests/ui.test.mjs && node tests/remediation-ui.test.mjs"
   }
 }
