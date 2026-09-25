@@ -5,3 +5,8 @@ node_modules/
 test-results/
 *.zip
 *.tar.gz
+.env
+.env.*
+!.env.example
+output/
+tmp/
