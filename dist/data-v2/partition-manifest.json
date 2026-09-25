@@ -1,0 +1,16 @@
+{
+  "datasetId": "airframe-90d22b0035e00326",
+  "partitions": [
+    {
+      "path": "bundle.json",
+      "sha256": "1ea7b0b139d2ad971db590416f058f424dd4fa03ef9cf3ee228488106af93f7a",
+      "byteLength": 525649,
+      "recordCount": 562,
+      "kind": "complete_curated_client_episode_windows",
+      "completeDataset": false,
+      "firstUs": 1789561528328446,
+      "lastUs": 1789561550682829
+    }
+  ],
+  "fullNormalizedStore": "local-only indexed SQLite; not served to browser"
+}

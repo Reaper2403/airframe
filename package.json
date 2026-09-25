@@ -1,0 +1,11 @@
+{
+  "name": "airframe",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node scripts/serve.mjs",
+    "test": "node --test tests/service.test.mjs tests/static.test.mjs",
+    "test:ui": "node tests/ui.test.mjs"
+  }
+}

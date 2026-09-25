@@ -1,0 +1,7 @@
+data/
+scripts/__pycache__/
+node_modules/
+.DS_Store
+test-results/
+*.zip
+*.tar.gz

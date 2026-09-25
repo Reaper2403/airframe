@@ -1,0 +1,216 @@
+{
+  "datasetId": "airframe-90d22b0035e00326",
+  "schemaVersion": "2.0",
+  "parserVersion": "airframe-header-2.0",
+  "detectorVersion": "deterministic-2.0",
+  "aliasVersion": "2.0",
+  "origin": "supplied_capture",
+  "sources": [
+    {
+      "id": "S01",
+      "fileName": "sensor01.pcap",
+      "sha256": "130b9aa382afd8c71cdf6c1960c62b01009ba48ba6a4a76e13852bfeb93b8320",
+      "byteLength": 48903854,
+      "recordCount": 191007,
+      "retryCount": 9584,
+      "firstUs": 1789561451587666,
+      "lastUs": 1789563253659853,
+      "frequency": 5180,
+      "channel": 36,
+      "frequencies": {
+        "5180": 191007
+      },
+      "health": "unknown",
+      "clock": "unverified",
+      "linkType": 127,
+      "timestampResolution": "microsecond",
+      "location": null
+    },
+    {
+      "id": "S02",
+      "fileName": "sensor02.pcap",
+      "sha256": "79bd7f8dd518ea716dbeb0823da5335650716609079d3226a15429b1b2528270",
+      "byteLength": 48238268,
+      "recordCount": 188676,
+      "retryCount": 9102,
+      "firstUs": 1789561451863877,
+      "lastUs": 1789563254002400,
+      "frequency": 5200,
+      "channel": 40,
+      "frequencies": {
+        "5200": 188676
+      },
+      "health": "unknown",
+      "clock": "unverified",
+      "linkType": 127,
+      "timestampResolution": "microsecond",
+      "location": null
+    },
+    {
+      "id": "S03",
+      "fileName": "sensor03.pcap",
+      "sha256": "0c7835e1f52281100849a081ee9e3a9ba1e01a283df80cbcdbb619dcdcc3df75",
+      "byteLength": 32516365,
+      "recordCount": 127295,
+      "retryCount": 6102,
+      "firstUs": 1789561450781694,
+      "lastUs": 1789563252875005,
+      "frequency": 5220,
+      "channel": 44,
+      "frequencies": {
+        "5220": 127295
+      },
+      "health": "unknown",
+      "clock": "unverified",
+      "linkType": 127,
+      "timestampResolution": "microsecond",
+      "location": null
+    },
+    {
+      "id": "S04",
+      "fileName": "sensor04.pcap",
+      "sha256": "f481ed7d21743f03bdee310aa8b769ba178150c599c75a76b9b3787e6cae2aff",
+      "byteLength": 32468612,
+      "recordCount": 126903,
+      "retryCount": 6125,
+      "firstUs": 1789561452673213,
+      "lastUs": 1789563254731495,
+      "frequency": 5240,
+      "channel": 48,
+      "frequencies": {
+        "5240": 126903
+      },
+      "health": "unknown",
+      "clock": "unverified",
+      "linkType": 127,
+      "timestampResolution": "microsecond",
+      "location": null
+    },
+    {
+      "id": "S05",
+      "fileName": "sensor05.pcap",
+      "sha256": "ed71261e70fa057cdf8de33f57d68cc5faa4ed22783886ec116a39e438330db9",
+      "byteLength": 38150705,
+      "recordCount": 148483,
+      "retryCount": 7509,
+      "firstUs": 1789561450403127,
+      "lastUs": 1789563252422943,
+      "frequency": 5745,
+      "channel": 149,
+      "frequencies": {
+        "5745": 148483
+      },
+      "health": "unknown",
+      "clock": "unverified",
+      "linkType": 127,
+      "timestampResolution": "microsecond",
+      "location": null
+    },
+    {
+      "id": "S06",
+      "fileName": "sensor06.pcap",
+      "sha256": "39f936baf1e309b9b9becc3401e82b07be179b9a5da68473f7ee575199008946",
+      "byteLength": 26726553,
+      "recordCount": 104585,
+      "retryCount": 4964,
+      "firstUs": 1789561452102636,
+      "lastUs": 1789563254178554,
+      "frequency": 5765,
+      "channel": 153,
+      "frequencies": {
+        "5765": 104585
+      },
+      "health": "unknown",
+      "clock": "unverified",
+      "linkType": 127,
+      "timestampResolution": "microsecond",
+      "location": null
+    },
+    {
+      "id": "S07",
+      "fileName": "sensor07.pcap",
+      "sha256": "e1c82e966c75fc4513f442e4e7072943f6792c0125dd2581adf7ace33d38fc96",
+      "byteLength": 26772591,
+      "recordCount": 104773,
+      "retryCount": 4885,
+      "firstUs": 1789561451383894,
+      "lastUs": 1789563253444744,
+      "frequency": 5785,
+      "channel": 157,
+      "frequencies": {
+        "5785": 104773
+      },
+      "health": "unknown",
+      "clock": "unverified",
+      "linkType": 127,
+      "timestampResolution": "microsecond",
+      "location": null
+    },
+    {
+      "id": "S08",
+      "fileName": "sensor08.pcap",
+      "sha256": "1a42cdc453e45da7cffab478aa96e1be50cef4c09608d5b94c23115ddf214ba6",
+      "byteLength": 32497230,
+      "recordCount": 127131,
+      "retryCount": 6273,
+      "firstUs": 1789561452493744,
+      "lastUs": 1789563254541893,
+      "frequency": 5805,
+      "channel": 161,
+      "frequencies": {
+        "5805": 127131
+      },
+      "health": "unknown",
+      "clock": "unverified",
+      "linkType": 127,
+      "timestampResolution": "microsecond",
+      "location": null
+    }
+  ],
+  "firstUs": 1789561450403127,
+  "lastUs": 1789563254731495,
+  "observationCount": 1118853,
+  "retryCount": 54544,
+  "byteLength": 286274178,
+  "rejectedRecordCount": 0,
+  "fieldCoverage": {
+    "signal:present": 1118853,
+    "noise:present": 1118853,
+    "rate:present": 1118853,
+    "frequency:present": 1118853,
+    "reasonCode:unavailable": 1116854,
+    "statusCode:present": 1503,
+    "statusCode:unavailable": 1117350,
+    "reasonCode:present": 1999
+  },
+  "frameTypes": {
+    "Authentication": 817,
+    "Association response": 686,
+    "QoS data": 2213,
+    "Beacon": 914057,
+    "Data": 370,
+    "Action": 115,
+    "Probe response": 173964,
+    "Probe request": 6024,
+    "ACK": 18387,
+    "Deauthentication": 1669,
+    "Disassociation": 330,
+    "Association request": 132,
+    "QoS null": 89
+  },
+  "limitations": [
+    "Cross-source clock alignment unverified.",
+    "Sensor health and capture loss unavailable.",
+    "Association response does not establish application recovery.",
+    "Factory geometry and placements are illustrative.",
+    "EAP/802.1X and advanced PHY analysis not implemented."
+  ],
+  "capabilities": {
+    "historicalReview": true,
+    "captureReplay": true,
+    "liveFeed": false,
+    "physicalLocation": false,
+    "applicationRecovery": false,
+    "eapAnalysis": false
+  }
+}
