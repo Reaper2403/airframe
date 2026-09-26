@@ -34,6 +34,28 @@ test('Network failures and rate limits are explicit',async()=>{
   await assert.rejects(callOpenAI({key:'test',model:'test',packet,fetcher:async()=>{throw new Error('secret')}}),{code:'provider_unavailable'});
   await assert.rejects(callOpenAI({key:'test',model:'test',packet,fetcher:async()=>new Response('{}',{status:429})}),{code:'provider_limit'});
 });
+test('Connection failures preserve safe diagnostics without exposing credentials or evidence',async()=>{
+  const secret='test-only-secret';
+  const cause=new AggregateError([Object.assign(new Error(secret),{code:'EPERM'}),Object.assign(new Error(secret),{code:secret})],secret);
+  let calls=0;
+  await assert.rejects(callOpenAI({key:secret,model:'test',packet,fetcher:async()=>{calls++;throw new TypeError(secret,{cause});}}),error=>{
+    assert.equal(error.code,'provider_unavailable');assert.equal(error.status,502);
+    assert.match(error.message,/server.*network access/);
+    assert.deepEqual(error.diagnostics.networkCodes,['EPERM']);
+    assert.ok(Number.isFinite(error.diagnostics.elapsedMs)&&error.diagnostics.elapsedMs>=0);
+    assert.ok(!JSON.stringify(error).includes(secret));assert.ok(!error.message.includes(secret));
+    return true;
+  });
+  assert.equal(calls,1,'An uncertain provider request must not be silently retried');
+});
+test('Request deadlines and connection timeouts are distinct from other network failures',async()=>{
+  for(const failure of [new DOMException('sensitive timeout details','TimeoutError'),new TypeError('fetch failed',{cause:Object.assign(new Error('sensitive timeout details'),{code:'UND_ERR_CONNECT_TIMEOUT'})})]){
+    await assert.rejects(callOpenAI({key:'test',model:'test',packet,fetcher:async()=>{throw failure;}}),error=>{
+      assert.equal(error.code,'provider_timeout');assert.equal(error.status,504);
+      assert.match(error.message,/timed out/);assert.ok(!JSON.stringify(error).includes('sensitive timeout details'));return true;
+    });
+  }
+});
 test('Only a completed overlong draft gets one bounded shortening pass',async()=>{
   const long=structuredClone(report);long.findings=Array.from({length:3},()=>({...report.findings[0],observation:'a '.repeat(170),reasoning:'a '.repeat(160),alternative:'a '.repeat(100),nextCheck:'a '.repeat(100)}));
   const overlong=()=>new Response(JSON.stringify({status:'completed',id:'long-draft',output:[{content:[{type:'output_text',text:JSON.stringify(long)}]}]}));

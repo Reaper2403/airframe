@@ -34,5 +34,8 @@ http.createServer(async(req,res)=>{
     const info=await stat(file);if(!info.isFile())throw new Error('Not found');
     res.writeHead(200,{'Content-Type':types[extname(file)]||'application/octet-stream','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'});
     res.end(await readFile(file));
-  }catch(error){if(req.url?.startsWith('/api/'))return json(res,error instanceof ReportError?error.status:500,{error:{code:error instanceof ReportError?error.code:'report_failed',message:error instanceof ReportError?error.message:'The report could not be completed. Refresh the evidence and try again.'}});res.writeHead(404);res.end('Not found');}
+  }catch(error){
+    if(error instanceof ReportError&&error.diagnostics)console.error('AIRFRAME report connection failure:',JSON.stringify(error.diagnostics));
+    if(req.url?.startsWith('/api/'))return json(res,error instanceof ReportError?error.status:500,{error:{code:error instanceof ReportError?error.code:'report_failed',message:error instanceof ReportError?error.message:'The report could not be completed. Refresh the evidence and try again.'}});res.writeHead(404);res.end('Not found');
+  }
 }).listen(port,'127.0.0.1',()=>console.log(`AIRFRAME preview: http://127.0.0.1:${port}`));

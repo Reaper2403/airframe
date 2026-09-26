@@ -1,10 +1,10 @@
-# Clue workspace verification — 25 September 2026
+# Investigation workspace verification — 25 September 2026
 
 This records the initial redesign. See [Incident report verification](INCIDENT_REPORT_VERIFICATION.md) for the subsequent network-engineer UI refinements and live OpenAI/PDF integration.
 
 ## Delivered scope
 
-Only the Investigation screen was redesigned. The shared app shell now mounts the clue workspace on that route and supplies its evidence service. Factory and Action brief modules, existing diagnostic service, and existing stylesheets match their pre-change SHA-256 hashes. Their entry and return paths were exercised in the browser. The original brief is explicitly separated from a newly selected comparison scope.
+Only the Investigation screen was redesigned. The shared app shell now mounts that workspace on the investigate route and supplies its evidence service. Factory and Action brief modules, existing diagnostic service, and existing stylesheets match their pre-change SHA-256 hashes. Their entry and return paths were exercised in the browser. The original brief is explicitly separated from a newly selected comparison scope.
 
 The screen provides a linked time/entity matrix (AP interface, channel, client, sensor), five named measurements, focus and peer comparisons, stage coverage, reason/protocol/status distributions, explainable clue highlights and recorded-interval histograms. Missing observations and unavailable measurements are not health verdicts. Exact matching frame references remain inspectable.
 

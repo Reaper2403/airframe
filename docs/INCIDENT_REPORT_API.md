@@ -1,8 +1,8 @@
 # Local incident report integration
 
-Run `npm start`, then use **Generate incident report** in Investigate. This sends a verified pseudonymized snapshot plus the separately attributed engineer note to OpenAI. JSON export remains available without an API key. Factory and the legacy Action brief retain their existing behavior.
+Run `npm start`, then use **Incident report** in Investigate. This sends a verified pseudonymized snapshot plus the separately attributed engineer note to OpenAI. JSON export remains available without an API key. Factory behaviour is unchanged.
 
-The server binds to loopback, validates Host/Origin and JSON request size, and allows one report in flight. Credentials are reread for each request. `.env.server` can set `AIRFRAME_OPENAI_ENV_FILE` to Ripple's local environment file; only its `OPENAI_API_KEY` and `OPENAI_MODEL` are used. The key is not copied into Airframe. A process `OPENAI_API_KEY` or `AIRFRAME_OPENAI_MODEL` overrides file configuration. `.env*`, generated reports and intermediate files are ignored by Git. Do not expose this local server as a multi-user service without authentication and per-user authorization.
+The server binds to loopback, validates Host/Origin and JSON request size, and allows one report in flight. Credentials are reread for each request. `.env.server` can set `AIRFRAME_OPENAI_ENV_FILE` to a local dotenv file; only its `OPENAI_API_KEY` and `OPENAI_MODEL` are used. The key is not copied into Airframe. A process `OPENAI_API_KEY` or `AIRFRAME_OPENAI_MODEL` overrides file configuration. `.env*`, generated reports and intermediate files are ignored by Git. Do not expose this local server as a multi-user service without authentication and per-user authorization.
 
 `POST /api/incident-report` accepts `{packet, engineerContext}`. Packet scope/context are selectors, not trusted facts: the server verifies local data hashes and recomputes the analytical packet before inference. A changed projection rejects stale browser evidence. Replay obeys timestamp and release ordinal. Notes are limited to 4,000 characters. The report service does not execute model-generated code or expose raw captures.
 
@@ -13,3 +13,9 @@ On success the response contains `{report, pdfUrl, evidenceUrl, model, generated
 The PDF renderer requires Python with `reportlab`; `AIRFRAME_PYTHON` selects the interpreter. The renderer escapes all model text and measures the page before writing. It rejects overflow rather than clipping content. Missing/expired credentials, quota failures, refusals, incomplete output, ungrounded references and render failures stay explicit; there is no fabricated AI fallback.
 
 API implementation follows [OpenAI Structured Outputs](https://developers.openai.com/api/docs/guides/structured-outputs). Browser credentials are never used. `store:false` is a request-storage choice, not a claim that no provider retention policy applies.
+
+## Troubleshooting connections
+
+`provider_unavailable` (HTTP 502) means the report server could not establish or maintain its connection to OpenAI. Check network access from the process running `npm start`, including its inherited proxy and editor sandbox settings. A working browser or a fresh terminal does not establish that an already-running server has the same access. After correcting the launch environment, restart that server and retry. Do not disable TLS verification.
+
+`provider_timeout` (HTTP 504) identifies a request deadline or transport timeout separately. The request deadline remains three minutes. Server logs include only allowlisted network error codes and elapsed milliseconds, never credentials, raw error messages or the evidence packet. No uncertain request is retried automatically.

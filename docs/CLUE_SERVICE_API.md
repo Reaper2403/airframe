@@ -1,4 +1,4 @@
-# Clue workspace analytical boundary
+# Investigation comparison service
 
 `dist/js/clue-service.js` is independent of the Factory and Action Brief screens.
 It uses the existing evidence service for canonical frame retrieval and capture
@@ -52,7 +52,7 @@ Tests use an explicit synthetic integrity anchor and transport.
 
 Context is `{ mode, cutoffUs, releaseOrdinal, generation }`. Historical mode
 uses the manifest end. Capture replay requires an integer recorded timestamp;
-both timestamp and release ordinal gate every observation, comparison, clue,
+both timestamp and release ordinal gate every observation, comparison, finding,
 source-quality finding, evidence inspection and export. `setContext(context)`
 announces a new generation during asynchronous UI transitions. Late older
 requests are rejected as `stale_generation`.

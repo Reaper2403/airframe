@@ -1,6 +1,6 @@
-# Airframe investigation and incident report contract
+# Incident report
 
-This change implements the blind network engineer's discoverability fixes and adds an optional OpenAI review of a frozen, inspectable evidence snapshot. The dashboard remains useful without AI. The report adds relationships and discriminating next checks; it must not merely restate the largest chart values or claim a physical cause.
+AIRFRAME can optionally send a frozen, inspectable evidence snapshot to OpenAI and return a one-page assessment. The investigation workspace remains fully usable without a model. The report should add relationships and discriminating next checks. It must not restate the largest chart values or claim a physical cause.
 
 ## Diagnostic acceptance
 

@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="1010" viewBox="0 0 1240 1010" role="img" aria-labelledby="title description">
+  <title id="title">AIRFRAME architecture</title>
+  <desc id="description">Private Wi-Fi captures are prepared offline into pseudonymized evidence publications. A local server serves these to Factory and Investigate in the browser. Investigation can export JSON locally. When an engineer requests a report, the local server rebuilds and verifies the evidence, sends it to OpenAI, validates the response and renders a one-page PDF with companion JSON.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="#237c86"/></marker>
+    <style>
+      text { font-family: Arial, Helvetica, sans-serif; }
+      .title { font-size:32px; font-weight:700; fill:#112a35; }
+      .subtitle { font-size:18px; fill:#4b6470; }
+      .lane { fill:#f1f5f6; stroke:#dce5e8; }
+      .lane-title { font-size:14px; font-weight:700; letter-spacing:1.3px; fill:#48636f; }
+      .box { fill:#fff; stroke:#b4cbd1; stroke-width:1.5; }
+      .focus { fill:#143844; stroke:#143844; stroke-width:1.5; }
+      .external { fill:#fff8e7; stroke:#bd9850; stroke-width:1.5; }
+      .heading { font-size:21px; font-weight:700; fill:#153644; }
+      .copy { font-size:17px; fill:#47616d; }
+      .light { fill:#fff; }
+      .muted-light { fill:#d4e7ed; }
+      .note { font-size:15px; fill:#57717a; }
+      .flow { fill:none; stroke:#237c86; stroke-width:2.5; marker-end:url(#arrow); stroke-linejoin:round; }
+      .tag { font-size:14px; font-weight:700; fill:#237c86; }
+    </style>
+  </defs>
+  <rect width="1240" height="1010" fill="#ffffff"/>
+  <text x="40" y="54" class="title">From captured evidence to a supported next check</text>
+  <text x="40" y="88" class="subtitle">Local investigation first. Optional AI analysis with a verified evidence handoff.</text>
+
+  <rect x="24" y="120" width="1192" height="220" rx="16" class="lane"/>
+  <text x="48" y="153" class="lane-title">01 / PREPARE EVIDENCE · LOCAL, OFFLINE</text>
+  <rect x="48" y="177" width="352" height="112" rx="10" class="box"/>
+  <text x="70" y="211" class="heading">Private Wi-Fi captures</text>
+  <text x="70" y="241" class="copy">Supplied PCAP files</text>
+  <text x="70" y="267" class="copy">Original source / frame provenance</text>
+  <path d="M400 233 H442" class="flow"/>
+  <rect x="444" y="177" width="352" height="112" rx="10" class="box"/>
+  <text x="466" y="211" class="heading">Python evidence pipeline</text>
+  <text x="466" y="241" class="copy">Parse headers · pseudonymize</text>
+  <text x="466" y="267" class="copy">Verify hashes · publish projections</text>
+  <path d="M796 233 H838" class="flow"/>
+  <rect x="840" y="177" width="352" height="112" rx="10" class="box"/>
+  <text x="862" y="211" class="heading">Published evidence</text>
+  <text x="862" y="241" class="copy">v2 episodes · v3 diagnostic histories</text>
+  <text x="862" y="267" class="copy">v4 compact comparison projection</text>
+  <text x="48" y="319" class="note">Raw captures, normalized SQLite and the identity registry stay local; only sanitized artifacts are served.</text>
+
+  <path d="M1016 340 V363 H620 V388" class="flow"/>
+  <rect x="739" y="348" width="232" height="26" fill="#fff"/>
+  <text x="750" y="366" class="tag">Local server serves dist/</text>
+
+  <rect x="24" y="390" width="1192" height="220" rx="16" class="lane"/>
+  <text x="48" y="423" class="lane-title">02 / INVESTIGATE · BROWSER, NO MODEL REQUIRED</text>
+  <rect x="48" y="444" width="352" height="112" rx="10" class="box"/>
+  <text x="70" y="478" class="heading">Factory</text>
+  <text x="70" y="508" class="copy">Episodes · capture-wide patterns</text>
+  <text x="70" y="534" class="copy">Illustrative floor context</text>
+  <path d="M400 500 H442" class="flow"/>
+  <rect x="444" y="444" width="352" height="112" rx="10" class="focus"/>
+  <text x="466" y="478" class="heading light">Investigate</text>
+  <text x="466" y="508" class="copy muted-light">Time × entity · trends · cohorts</text>
+  <text x="466" y="534" class="copy muted-light">Findings · source evidence · replay</text>
+  <path d="M796 500 H838" class="flow"/>
+  <rect x="840" y="444" width="352" height="112" rx="10" class="box"/>
+  <text x="862" y="478" class="heading">Local JSON export</text>
+  <text x="862" y="508" class="copy">Scope · facts · evidence references</text>
+  <text x="862" y="534" class="copy">Measurement limits and unknowns</text>
+  <text x="48" y="585" class="note">One time window and replay context govern the views, evidence inspection and exported snapshot.</text>
+
+  <path d="M620 610 V636 H224 V659" class="flow"/>
+  <rect x="260" y="622" width="334" height="27" fill="#fff"/>
+  <text x="272" y="641" class="tag">Engineer chooses “Generate report”</text>
+
+  <rect x="24" y="661" width="1192" height="278" rx="16" class="lane"/>
+  <text x="48" y="694" class="lane-title">03 / OPTIONAL REPORT · LOCAL SERVER → OPENAI → LOCAL OUTPUT</text>
+  <rect x="48" y="714" width="352" height="144" rx="10" class="box"/>
+  <text x="70" y="748" class="heading">Node.js report service</text>
+  <text x="70" y="778" class="copy">Recompute facts from verified data</text>
+  <text x="70" y="804" class="copy">Keep the API key server-side</text>
+  <text x="70" y="830" class="copy">Attribute engineer notes separately</text>
+  <path d="M400 786 H442" class="flow"/>
+  <rect x="444" y="714" width="352" height="144" rx="10" class="external"/>
+  <text x="466" y="748" class="heading">OpenAI · external service</text>
+  <text x="466" y="778" class="copy">Relate the supplied evidence</text>
+  <text x="466" y="804" class="copy">Up to three cross-view deductions</text>
+  <text x="466" y="830" class="copy">Return structured findings</text>
+  <path d="M796 786 H838" class="flow"/>
+  <rect x="840" y="714" width="352" height="144" rx="10" class="box"/>
+  <text x="862" y="748" class="heading">Validate and render locally</text>
+  <text x="862" y="778" class="copy">Schema · references · word budget</text>
+  <text x="862" y="804" class="copy">Python + ReportLab</text>
+  <text x="862" y="830" class="copy">One-page PDF + evidence JSON</text>
+  <text x="48" y="889" class="note">Only the verified pseudonymized packet and notes go to OpenAI. The model cannot read raw files or run scripts.</text>
+  <text x="48" y="915" class="note">The engineer reviews the interpretation and decides the next check. AIRFRAME makes no network configuration changes.</text>
+  <text x="40" y="979" class="note">Current implementation: recorded capture review and replay. Live ingestion and physical site mapping are future integrations.</text>
+</svg>

@@ -27,7 +27,7 @@ await test('Factory still opens its original overview and investigation route',a
   await page.goto(base+'/#factory');await page.locator('.factory-view').waitFor();
   assert.ok(await page.locator('[data-select]').count()>0);
   await page.locator('[data-open="AF-104"]').last().click();await ready();
-  assert.match(await page.locator('.cw-heading').innerText(),/Follow the clues/);
+  assert.match(await page.locator('.cw-heading').innerText(),/Investigate the window/);
   assert.ok(await page.locator('.cw-matrix-row').count()>1);
   await page.screenshot({path:'test-results/clue-workspace/desktop.png',fullPage:true});
 });
@@ -81,11 +81,6 @@ await test('Backward replay exports no later sample evidence',async()=>{
   assert.ok(packet.evidence.samples.every(row=>row.timeUs<=packet.context.cutoffUs));
   assert.ok(packet.window.endUs<=packet.context.cutoffUs);
   await page.locator('#mode-toggle').click();await ready();
-});
-await test('Original action brief remains incident scoped and returns to the new screen',async()=>{
-  await page.locator('[data-clue-original-brief]').click();await page.locator('.action-view').waitFor();
-  assert.match(await page.locator('.ws-action-breadcrumb').innerText(),/AF-104/);
-  await page.getByRole('button',{name:'Close action brief',exact:true}).click();await ready();
 });
 await test('Narrow layout and matrix keyboard navigation remain usable',async()=>{
   await page.setViewportSize({width:390,height:844});

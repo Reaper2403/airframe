@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="color-scheme" content="dark">
-  <title>AIRFRAME — Factory network intelligence</title>
-  <meta name="description" content="Evidence-grounded wireless investigation, capture replay and action planning.">
+  <title>AIRFRAME — Wireless capture investigation</title>
+  <meta name="description" content="Compare recorded industrial Wi-Fi captures, inspect protocol evidence and draft an unsent action brief.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a0c0e'/%3E%3Cpath d='M12 48L30 14h4l18 34h-8l-4-8H24l-4 8zm16-15h8l-4-8z' fill='%239fceff'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="./styles.css">
   <link rel="stylesheet" href="./workspace.css">
@@ -14,15 +14,15 @@
   <link rel="stylesheet" href="./clue-workspace.css">
 </head>
 <body>
-  <a href="#app" class="skip-link">Skip to investigation content</a>
+  <a href="#app" class="skip-link">Skip to capture investigation</a>
   <header class="app-header">
-    <a class="app-brand" href="#factory" aria-label="AIRFRAME factory overview">AIRFRAME</a>
+    <a class="app-brand" href="#factory" aria-label="AIRFRAME Factory overview">AIRFRAME</a>
     <nav class="app-nav" aria-label="Main navigation"><a id="factory-nav" href="#factory">Factory</a><a id="investigate-nav" href="#investigate/AF-104">Investigate</a></nav>
-    <div class="header-right"><div><button class="mode-button" id="mode-toggle">▷ Replay investigation</button><div class="mode-caption" id="mode-caption">Historical review</div></div><span class="header-date">16 SEP 2026 · UTC</span></div>
+    <div class="header-right"><div><button class="mode-button" id="mode-toggle">Replay capture</button><div class="mode-caption" id="mode-caption">Historical review</div></div><span class="header-date">16 SEP 2026 · UTC</span></div>
   </header>
   <section class="global-replay" id="global-replay" aria-label="Capture replay controls" hidden><button id="global-play">Play</button><button id="global-restart">Restart</button><input id="global-range" type="range" aria-label="Replay recorded time" step="100000"><time id="global-time"></time><select id="global-speed" aria-label="Replay speed"><option value="1">1×</option><option value="5">5×</option><option value="20">20×</option></select></section>
-  <main id="app" class="app-main" tabindex="-1"><section class="app-loading"><h1>Loading capture evidence</h1><p>Preparing the investigation workspace…</p></section></main>
-  <dialog id="frame-dialog" class="frame-dialog" aria-label="Frame evidence details"><div id="frame-body"></div></dialog>
+  <main id="app" class="app-main" tabindex="-1"><section class="app-loading"><h1>Loading capture evidence</h1><p>Verifying the published observation bundle…</p></section></main>
+  <dialog id="frame-dialog" class="frame-dialog" aria-label="Observation details"><div id="frame-body"></div></dialog>
   <div id="toast" class="global-toast" role="status" aria-live="polite"></div>
   <script type="module" src="./js/app.js"></script>
 </body>

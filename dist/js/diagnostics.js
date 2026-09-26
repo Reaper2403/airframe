@@ -21,7 +21,7 @@ export function mountDiagnostics(container,ctx,route){
  if(route==='factory')container.querySelector('.attention-heading')?.after(host);
  else container.querySelector(route==='action'?'.ws-brief-heading':'.ws-page-heading')?.after(host);
  if(!host.isConnected)return()=>{alive=false;};
- host.innerHTML='<div class="diag-loading" role="status">Loading diagnostic coverage…</div>';
+ host.innerHTML='<div class="diag-loading" role="status">Loading capture coverage…</div>';
  async function start(){try{
   if(!ctx.service.loadDiagnostics)throw Error('Expanded diagnostic processing is unavailable.');
   await ctx.service.loadDiagnostics(ctx.context);if(!active())return;
